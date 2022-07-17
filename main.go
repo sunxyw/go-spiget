@@ -10,11 +10,10 @@ import (
 func main() {
 	client := spiget.NewClient(nil)
 
-	resource, _, err := client.Resources.Get(context.Background(), 6245)
-
+	status, _, err := client.Status.Get(context.Background())
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 
-	fmt.Println(resource)
+	fmt.Println(status)
 }
