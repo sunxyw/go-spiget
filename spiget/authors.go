@@ -86,18 +86,23 @@ type AuthorSearchOptions struct {
 // Search searches for authors by specified field.
 //
 // Spiget API docs: https://spiget.org/documentation/#!/authors/get_search_authors_query
-func (a *AuthorsService) Search(ctx context.Context, query string) ([]*Author, *Response, error) {
+func (a *AuthorsService) Search(ctx context.Context, query string, opts AuthorSearchOptions) ([]*Author, *Response, error) {
 	u := "search/authors/" + query
+	u, err := addOptions(u, opts)
+	if err != nil {
+		return nil, nil, err
+	}
+
 	req, err := a.client.NewRequest("GET", u, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 
-	var authorss []*Author
-	resp, err := a.client.Do(ctx, req, &authorss)
+	var authors []*Author
+	resp, err := a.client.Do(ctx, req, &authors)
 	if err != nil {
 		return nil, resp, err
 	}
 
-	return authorss, resp, nil
+	return authors, resp, nil
 }

@@ -44,6 +44,7 @@ type Client struct {
 	Authors    *AuthorsService
 	Categories *CategoriesService
 	Resources  *ResourcesService
+	Search     *SearchService
 }
 
 type service struct {
@@ -113,6 +114,7 @@ func NewClient(httpClient *http.Client) *Client {
 	c.Authors = (*AuthorsService)(&c.common)
 	c.Categories = (*CategoriesService)(&c.common)
 	c.Resources = (*ResourcesService)(&c.common)
+	c.Search = (*SearchService)(&c.common)
 	return c
 }
 
