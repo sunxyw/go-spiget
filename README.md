@@ -1,7 +1,7 @@
-```
 # go-spiget
 
 go-spiget is a Go client library for accessing the [Spiget API v2](https://spiget.org/documentation).
+
 ## Installation
 
 go-spiget is compatible with modern Go releases in module mode, with Go installed:
