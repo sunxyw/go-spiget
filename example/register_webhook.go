@@ -1,4 +1,4 @@
-package main
+package example
 
 import (
 	"context"
@@ -7,7 +7,7 @@ import (
 	"github.com/sunxyw/go-spiget/spiget"
 )
 
-func main() {
+func RegisterWebhook() {
 	client := spiget.NewClient(nil)
 
 	webhook, _, err := client.Webhook.Register(context.Background(), "https://example.com/webhook", []string{"resource-update"})
@@ -16,4 +16,5 @@ func main() {
 	}
 
 	fmt.Printf("%+v\n", webhook)
+	// &{ID:2a34ebef22f24ff4d... Secret:d8740a0663a193d4...}
 }
