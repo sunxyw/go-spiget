@@ -46,6 +46,7 @@ type Client struct {
 	Resources  *ResourcesService
 	Search     *SearchService
 	Status     *StatusService
+	Webhook    *WebhookService
 }
 
 type service struct {
@@ -117,6 +118,7 @@ func NewClient(httpClient *http.Client) *Client {
 	c.Resources = (*ResourcesService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
 	c.Status = (*StatusService)(&c.common)
+	c.Webhook = (*WebhookService)(&c.common)
 	return c
 }
 

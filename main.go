@@ -10,10 +10,10 @@ import (
 func main() {
 	client := spiget.NewClient(nil)
 
-	status, _, err := client.Status.Get(context.Background())
+	webhook, _, err := client.Webhook.Register(context.Background(), "https://example.com/webhook", []string{"resource-update"})
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 
-	fmt.Println(status)
+	fmt.Printf("%+v\n", webhook)
 }
