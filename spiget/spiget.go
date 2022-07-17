@@ -41,7 +41,9 @@ type Client struct {
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 
 	// Services used for talking to different parts of the GitHub API.
-	Authors *AuthorsService
+	Authors    *AuthorsService
+	Categories *CategoriesService
+	Resources  *ResourcesService
 }
 
 type service struct {
@@ -109,6 +111,8 @@ func NewClient(httpClient *http.Client) *Client {
 	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
 	c.common.client = c
 	c.Authors = (*AuthorsService)(&c.common)
+	c.Categories = (*CategoriesService)(&c.common)
+	c.Resources = (*ResourcesService)(&c.common)
 	return c
 }
 

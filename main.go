@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/sunxyw/go-spiget/spiget"
 )
@@ -9,12 +10,11 @@ import (
 func main() {
 	client := spiget.NewClient(nil)
 
-	authors, _, err := client.Authors.List(context.Background(), nil)
+	resource, _, err := client.Resources.Get(context.Background(), 6245)
+
 	if err != nil {
 		panic(err)
 	}
 
-	for _, author := range authors {
-		println(author.Name)
-	}
+	fmt.Println(resource)
 }
