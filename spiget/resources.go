@@ -337,7 +337,7 @@ type ResourceSearchOptions struct {
 // Search resources.
 //
 // Spiget API docs: https://spiget.org/documentation/#!/resources/get_search_resources_query
-func (r *ResourcesService) Search(ctx context.Context, query string, opts ResourceSearchOptions) ([]*Resource, *Response, error) {
+func (r *ResourcesService) Search(ctx context.Context, query string, opts *ResourceSearchOptions) ([]*Resource, *Response, error) {
 	u := "search/resources/" + query
 	u, err := addOptions(u, opts)
 	if err != nil {
