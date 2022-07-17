@@ -10,9 +10,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"reflect"
 	"strconv"
 	"strings"
 	"sync"
+
+	"github.com/google/go-querystring/query"
 )
 
 const (
@@ -38,6 +41,7 @@ type Client struct {
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 
 	// Services used for talking to different parts of the GitHub API.
+	Authors *AuthorsService
 }
 
 type service struct {
@@ -55,11 +59,43 @@ func (c *Client) Client() *http.Client {
 // ListOptions specifies the optional parameters to various List methods that
 // support offset pagination.
 type ListOptions struct {
-	// For paginated result sets, page of results to retrieve.
+
+	// Size of the returned array.
+	Size int `url:"size,omitempty"`
+
+	// Page index.
 	Page int `url:"page,omitempty"`
 
-	// For paginated result sets, the number of results to include per page.
-	PerPage int `url:"per_page,omitempty"`
+	// Field to sort by.
+	Sort string `url:"sort,omitempty"`
+
+	// Order of the field to sort by. (asc or desc)
+	Order string `url:"order,omitempty"`
+
+	// Fields to return.
+	Fields []string `url:"fields,omitempty"`
+}
+
+// addOptions adds the parameters in opts as URL query parameters to s. opts
+// must be a struct whose fields may contain "url" tags.
+func addOptions(s string, opts interface{}) (string, error) {
+	v := reflect.ValueOf(opts)
+	if v.Kind() == reflect.Ptr && v.IsNil() {
+		return s, nil
+	}
+
+	u, err := url.Parse(s)
+	if err != nil {
+		return s, err
+	}
+
+	qs, err := query.Values(opts)
+	if err != nil {
+		return s, err
+	}
+
+	u.RawQuery = qs.Encode()
+	return u.String(), nil
 }
 
 // NewClient returns a new Spiget API client. If a nil httpClient is
@@ -72,6 +108,7 @@ func NewClient(httpClient *http.Client) *Client {
 
 	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
 	c.common.client = c
+	c.Authors = (*AuthorsService)(&c.common)
 	return c
 }
 
